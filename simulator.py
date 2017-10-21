@@ -24,7 +24,8 @@ class Simulator(object):
         self.v5 = []
 
         self.dt = 0.01
-        self.step = 0
+        self.time = 0
+        self.times = [self.time]
 
         self.calculate_kinetics()
 
@@ -48,6 +49,7 @@ class Simulator(object):
         dD = (self.v3[-1] - self.v4[-1]) * self.dt
         dE = (self.v4[-1] - self.v5[-1]) * self.dt
 
+        self.A.append(self.A[-1] + dA)
         self.B.append(self.B[-1] + dB)
         self.C.append(self.C[-1] + dC)
         self.D.append(self.D[-1] + dD)
@@ -55,6 +57,10 @@ class Simulator(object):
 
         self.calculate_kinetics()
 
-        self.step += self.dt
+        self.time += self.dt
+        self.times.append(self.time)
 
+    def go_to(self, time):
+        while time > self.time:
+            self.take_step()
 
